@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" width="100%" height="300">
+  <defs>
+    <style>
+      .bg { fill: #0a0a0d; rx: 12px; stroke: #2d2d3d; stroke-width: 2px; }
+      .dot { rx: 6px; }
+      .text { font-family: 'Fira Code', 'Consolas', monospace; font-size: 16px; }
+      .glow { text-shadow: 0 0 10px rgba(167, 139, 250, 0.7); }
+      
+      .keyword { fill: #ff7b72; }
+      .function { fill: #d2a8ff; }
+      .string { fill: #a5d6ff; }
+      .comment { fill: #8b949e; opacity: 0; animation: fadeIn 0.5s 1.8s forwards; }
+      .variable { fill: #c9d1d9; }
+      
+      .l1 { opacity: 0; animation: fadeIn 0.5s 0.2s forwards; }
+      .l2 { opacity: 0; animation: fadeIn 0.5s 0.4s forwards; }
+      .l3 { opacity: 0; animation: fadeIn 0.5s 0.6s forwards; }
+      .l4 { opacity: 0; animation: fadeIn 0.5s 0.8s forwards; }
+      .l5 { opacity: 0; animation: fadeIn 0.5s 1.0s forwards; }
+      .l6 { opacity: 0; animation: fadeIn 0.5s 1.2s forwards; }
+      .l7 { opacity: 0; animation: fadeIn 0.5s 1.4s forwards; }
+      .l8 { opacity: 0; animation: fadeIn 0.5s 1.6s forwards; }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      .cursor {
+        fill: #c9d1d9;
+        animation: blink 1s step-end infinite;
+      }
+      @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+      }
+    </style>
+  </defs>
+
+  <rect class="bg" width="100%" height="100%" />
+
+  <!-- Mac OS window buttons -->
+  <circle cx="25" cy="25" r="7" fill="#ff5f56" />
+  <circle cx="45" cy="25" r="7" fill="#ffbd2e" />
+  <circle cx="65" cy="25" r="7" fill="#27c93f" />
+  
+  <text x="50%" y="30" fill="#8b949e" font-family="sans-serif" font-size="12" text-anchor="middle">insta-reels - workspace</text>
+
+  <g transform="translate(30, 80)" class="text">
+    <text class="l1" y="0">
+      <tspan class="keyword">import</tspan> <tspan class="variable">{ Magic }</tspan> <tspan class="keyword">from</tspan> <tspan class="string">'@creativity/core'</tspan><tspan class="variable">;</tspan>
+    </text>
+
+    <text class="l2" y="30">
+      <tspan class="keyword">const</tspan> <tspan class="function">reels</tspan> <tspan class="keyword">=</tspan> <tspan class="variable">[</tspan>
+    </text>
+
+    <text class="l3" y="60">
+      <tspan class="string" dx="20">"reel-login-page"</tspan><tspan class="variable">,</tspan>
+    </text>
+
+    <text class="l4" y="90">
+      <tspan class="string" dx="20">"reel-particle-simulation"</tspan><tspan class="variable">,</tspan>
+    </text>
+
+    <text class="l5" y="120">
+      <tspan class="string" dx="20">"stayWithMe"</tspan>
+    </text>
+
+    <text class="l6" y="150">
+      <tspan class="variable">];</tspan>
+    </text>
+
+    <text class="l7" y="190">
+      <tspan class="function">generateStunningVisuals</tspan><tspan class="variable">(reels);</tspan>
+    </text>
+    
+    <text class="l8" y="230">
+      <tspan class="comment">// Creating magic...</tspan> <tspan class="cursor">_</tspan>
+    </text>
+  </g>
+</svg>
