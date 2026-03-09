@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Prompt Reel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <div class="background-effects">
+      <div class="ai-glow-orb orb-primary"></div>
+      <div class="ai-glow-orb orb-secondary"></div>
+      <div class="noise-overlay"></div>
+    </div>
+
+    <div class="card">
+      <div class="header">
+        <div class="ai-avatar-wrapper">
+          <div class="ai-avatar-ring"></div>
+          <div class="ai-avatar">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"
+              />
+            </svg>
+          </div>
+        </div>
+        <h2>How can I help you today?</h2>
+      </div>
+
+      <div class="suggestions">
+        <button class="chip">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"
+            />
+            <polyline points="14 2 14 8 20 8" />
+          </svg>
+          Summarize document
+        </button>
+        <button class="chip">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polyline points="16 18 22 12 16 6" />
+            <polyline points="8 6 2 12 8 18" />
+          </svg>
+          Generate code
+        </button>
+        <button class="chip">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+            />
+          </svg>
+          Draft response
+        </button>
+      </div>
+
+      <div class="prompt-box">
+        <button class="icon-btn attach-btn">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"
+            />
+          </svg>
+        </button>
+
+        <textarea
+          id="promptInput"
+          rows="1"
+          placeholder="Message Core AI..."
+        ></textarea>
+
+        <button class="icon-btn submit-btn" id="submitBtn">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            class="submit-icon"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <style>
+      body {
+        background-color: #0d0d12;
+        color: #ffffff;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .card {
+        background-color: #16161c;
+        border: 1px solid #333;
+      }
+
+      .header h2 {
+        color: #fff;
+        font-weight: normal;
+      }
+
+      button {
+        background: #252530;
+        color: #fff;
+        border: 1px solid #444;
+        cursor: pointer;
+      }
+
+      textarea {
+        background: transparent;
+        color: white;
+        border: 1px solid #444;
+        resize: none;
+      }
+
+      .background-effects,
+      .ai-avatar-ring {
+        display: none;
+      }
+
+      .card {
+        width: 600px;
+        padding: 32px;
+        border-radius: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+      }
+
+      .header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        text-align: center;
+      }
+
+      .ai-avatar-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .ai-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 2;
+      }
+
+      .header h2 {
+        margin: 0;
+        font-size: 1.5rem;
+      }
+
+      .suggestions {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .chip {
+        padding: 10px 16px;
+        border-radius: 100px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+      }
+
+      .prompt-box {
+        display: flex;
+        align-items: flex-end;
+        gap: 12px;
+        padding: 12px 16px;
+        border-radius: 18px;
+      }
+
+      textarea {
+        flex-grow: 1;
+        padding: 8px 0;
+        font-size: 1rem;
+        line-height: 1.5;
+        outline: none;
+        border: none;
+      }
+
+      .icon-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        flex-shrink: 0;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+      }
+
+      .card {
+        background: rgba(22, 22, 28, 0.65);
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
+      }
+
+      .ai-avatar {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.1),
+          rgba(255, 255, 255, 0.02)
+        );
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: #a78bfa;
+      }
+
+      .header h2 {
+        font-weight: 500;
+        letter-spacing: -0.02em;
+        background: linear-gradient(to right, #ffffff, #a1a1aa);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .chip {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: #a1a1aa;
+        font-weight: 500;
+      }
+
+      .prompt-box {
+        background: rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+      }
+
+      textarea::placeholder {
+        color: #63636e;
+      }
+
+      .icon-btn.attach-btn {
+        background: transparent;
+        border: none;
+        color: #63636e;
+      }
+
+      .icon-btn.submit-btn {
+        background: #ffffff;
+        color: #000000;
+        border: none;
+      }
+
+      .chip,
+      .icon-btn,
+      .prompt-box,
+      textarea,
+      .ai-avatar {
+        transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+      }
+
+      .chip:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: #ffffff;
+        transform: translateY(-2px);
+        border-color: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .chip svg {
+        transition:
+          transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+          color 0.3s;
+      }
+
+      .chip:hover svg {
+        transform: scale(1.15) rotate(5deg);
+        color: #a78bfa;
+      }
+
+      .prompt-box:focus-within {
+        border-color: rgba(167, 139, 250, 0.6);
+        box-shadow:
+          0 0 15px rgba(167, 139, 250, 0.15),
+          inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        background: rgba(0, 0, 0, 0.4);
+      }
+
+      .icon-btn.submit-btn {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .icon-btn.submit-btn::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, #a78bfa, #3b82f6);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .icon-btn.submit-btn:hover {
+        transform: scale(1.08);
+        box-shadow: 0 0 20px rgba(167, 139, 250, 0.4);
+        border: none;
+      }
+
+      .icon-btn.submit-btn:hover::before {
+        opacity: 1;
+      }
+
+      .submit-icon {
+        position: relative;
+        z-index: 1;
+        transition:
+          transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+          color 0.3s ease;
+      }
+
+      .icon-btn.submit-btn:hover .submit-icon {
+        color: #ffffff;
+        transform: translate(2px, -2px) scale(1.1);
+      }
+
+      .icon-btn.submit-btn:active {
+        transform: scale(0.95);
+      }
+
+      .icon-btn.attach-btn:hover {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.1);
+        transform: rotate(15deg) scale(1.1);
+      }
+
+      .background-effects {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        overflow: hidden;
+        background: radial-gradient(
+          circle at 50% -20%,
+          #1a1a2e 0%,
+          #08080c 80%
+        );
+      }
+
+      .ai-glow-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(140px);
+        opacity: 0.25;
+      }
+
+      .orb-primary {
+        width: 600px;
+        height: 600px;
+        background: conic-gradient(
+          from 0deg,
+          #a78bfa,
+          #8b5cf6,
+          #3b82f6,
+          #a78bfa
+        );
+        top: -200px;
+        left: 10%;
+        animation:
+          drift 20s ease-in-out infinite alternate,
+          spinSlow 15s linear infinite;
+      }
+
+      .orb-secondary {
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, #3b82f6, #2dd4bf);
+        bottom: -100px;
+        right: 5%;
+        animation: drift 15s ease-in-out infinite alternate-reverse;
+        opacity: 0.15;
+      }
+
+      .noise-overlay {
+        position: absolute;
+        inset: 0;
+        opacity: 0.04;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        pointer-events: none;
+      }
+
+      @keyframes drift {
+        0% {
+          transform: translate(0, 0) scale(1);
+        }
+
+        100% {
+          transform: translate(50px, 40px) scale(1.1);
+        }
+      }
+
+      @keyframes spinSlow {
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .ai-avatar-ring {
+        display: block;
+        position: absolute;
+        inset: -6px;
+        border-radius: 18px;
+        background: conic-gradient(
+          from 0deg,
+          #a78bfa,
+          transparent 30%,
+          #3b82f6,
+          transparent 60%,
+          #a78bfa
+        );
+        z-index: 1;
+        animation: spinSlow 3s linear infinite;
+        mask:
+          linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+        -webkit-mask:
+          linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        padding: 2px;
+        opacity: 0.8;
+      }
+
+      .ai-avatar {
+        box-shadow: 0 0 20px rgba(167, 139, 250, 0.4);
+      }
+
+      .ai-avatar svg {
+        animation: heartbeat 2.5s infinite ease-in-out;
+      }
+
+      @keyframes heartbeat {
+        0%,
+        100% {
+          transform: scale(1);
+          filter: drop-shadow(0 0 0 rgba(167, 139, 250, 0));
+        }
+
+        15% {
+          transform: scale(1.1);
+          filter: drop-shadow(0 0 8px rgba(167, 139, 250, 0.6));
+        }
+
+        30% {
+          transform: scale(1);
+          filter: drop-shadow(0 0 0 rgba(167, 139, 250, 0));
+        }
+      }
+
+      .prompt-box {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .prompt-box::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.05),
+          transparent
+        );
+        animation: sweep 4s ease-in-out infinite;
+        pointer-events: none;
+      }
+
+      @keyframes sweep {
+        0% {
+          left: -100%;
+        }
+
+        50% {
+          left: 200%;
+        }
+
+        100% {
+          left: 200%;
+        }
+      }
+
+      .spinner {
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+    </style>
+
+    <script>
+      const submitBtn = document.getElementById("submitBtn");
+      const promptInput = document.getElementById("promptInput");
+      const promptBox = document.querySelector(".prompt-box");
+
+      promptInput.addEventListener("input", function () {
+        this.style.height = "auto";
+        this.style.height = this.scrollHeight + "px";
+        if (this.value === "") {
+          this.style.height = "auto";
+        }
+      });
+
+      submitBtn.addEventListener("click", () => {
+        if (!promptInput.value.trim()) return;
+
+        const originalContent = submitBtn.innerHTML;
+
+        submitBtn.style.pointerEvents = "none";
+        promptInput.disabled = true;
+
+        submitBtn.style.background =
+          "linear-gradient(135deg, #a78bfa, #3b82f6)";
+        submitBtn.style.boxShadow = "0 0 20px rgba(167, 139, 250, 0.4)";
+        submitBtn.innerHTML = '<div class="spinner"></div>';
+
+        setTimeout(() => {
+          submitBtn.style.pointerEvents = "auto";
+          submitBtn.style.background = "";
+          submitBtn.style.boxShadow = "";
+          submitBtn.innerHTML = originalContent;
+          promptInput.value = "";
+          promptInput.style.height = "auto";
+          promptInput.disabled = false;
+          promptInput.placeholder = "AI is responding...";
+
+          promptBox.style.borderColor = "#10b981";
+          promptBox.style.boxShadow = "0 0 20px rgba(16, 185, 129, 0.2)";
+
+          setTimeout(() => {
+            promptBox.style.borderColor = "";
+            promptBox.style.boxShadow = "";
+            promptInput.placeholder = "Message Core AI...";
+          }, 2000);
+        }, 1800);
+      });
+    </script>
+  </body>
+</html>
