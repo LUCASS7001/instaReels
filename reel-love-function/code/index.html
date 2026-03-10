@@ -1,0 +1,1208 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>love.exe</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+    <div class="flash" id="flash"></div>
+    <div class="scan-line" id="scanLine"></div>
+
+    <div class="screen" id="screen">
+      <div class="glow-ring"></div>
+      <div class="lock-icon" id="lockIcon">🔒</div>
+      <h1 class="title">love.exe</h1>
+      <p class="subtitle">SECURITY PROTOCOL v2.0</p>
+      <div class="status" id="status">❤️ ACCESS DENIED</div>
+      <div class="divider"></div>
+      <label class="label">Enter the password to my heart</label>
+      <input
+        type="text"
+        class="input"
+        id="passInput"
+        placeholder="type here..."
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button class="btn" id="unlockBtn">UNLOCK 🔓</button>
+      <p class="message" id="message"></p>
+      <div class="terminal-path">C:\Users\Heart\love.exe</div>
+    </div>
+
+    <div class="hearts-container" id="heartsContainer"></div>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #0a0a0f;
+        color: #fff;
+        font-family: "Inter", sans-serif;
+        overflow: hidden;
+      }
+
+      .screen {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+      }
+
+      .lock-icon {
+        font-size: 40px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .title {
+        font-size: 24px;
+      }
+
+      .subtitle {
+        font-size: 10px;
+        opacity: 0.5;
+      }
+
+      .status {
+        color: #ff2d55;
+        margin: 10px 0;
+      }
+
+      .divider {
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+        margin: 10px 0;
+        width: 200px;
+      }
+
+      .label {
+        font-size: 12px;
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      .input {
+        padding: 10px;
+        width: 260px;
+      }
+
+      .btn {
+        padding: 10px 20px;
+        cursor: pointer;
+        margin-top: 8px;
+      }
+
+      .message {
+        min-height: 20px;
+        margin-top: 16px;
+      }
+
+      .terminal-path {
+        font-size: 9px;
+        opacity: 0.2;
+        margin-top: 16px;
+      }
+
+      .glow-ring {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .bg-orb,
+      .scanlines,
+      .vignette,
+      .glow-ring {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .bg-orb,
+      .scanlines,
+      .vignette,
+      .flash,
+      .scan-line {
+        position: fixed;
+      }
+
+      .flash {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #fff;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 999;
+        transition: opacity 0.15s ease;
+      }
+
+      .scan-line {
+        top: -5px;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 998;
+      }
+
+      .hearts-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 200;
+      }
+
+      .screen {
+        gap: 10px;
+        padding: 40px 20px;
+      }
+
+      .lock-icon {
+        font-size: 64px;
+      }
+
+      .title {
+        font-size: 42px;
+        letter-spacing: 8px;
+      }
+
+      .subtitle {
+        font-size: 10px;
+        letter-spacing: 8px;
+      }
+
+      .status {
+        font-size: 15px;
+        letter-spacing: 4px;
+      }
+
+      .divider {
+        width: 300px;
+        margin: 6px 0;
+      }
+
+      .label {
+        font-size: 11px;
+      }
+
+      .input {
+        width: 320px;
+        padding: 18px 24px;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 20px;
+        text-align: center;
+      }
+
+      .btn {
+        width: 320px;
+        padding: 18px;
+        border-radius: 16px;
+        border: none;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 4px;
+      }
+
+      .message {
+        font-size: 15px;
+      }
+
+      .terminal-path {
+        font-family: monospace;
+        letter-spacing: 0.5px;
+      }
+
+      .glow-ring {
+        width: 160px;
+        height: 160px;
+        top: -30px;
+      }
+
+      body {
+        background: #050510;
+      }
+
+      .title {
+        font-family: "Orbitron", monospace;
+        font-weight: 900;
+        background: linear-gradient(
+          135deg,
+          #ff2d75 0%,
+          #ff6b9d 40%,
+          #ff2d75 80%,
+          #ff9dc4 100%
+        );
+        background-size: 300% 300%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .subtitle {
+        font-family: "Orbitron", monospace;
+        text-transform: uppercase;
+        color: rgba(255, 45, 117, 0.25);
+      }
+
+      .status {
+        font-family: "Orbitron", monospace;
+        font-weight: 700;
+        color: #ff2d55;
+        text-shadow:
+          0 0 30px rgba(255, 45, 85, 0.5),
+          0 0 80px rgba(255, 45, 85, 0.2);
+      }
+
+      .divider {
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 45, 85, 0.25),
+          transparent
+        );
+      }
+
+      .label {
+        color: rgba(255, 255, 255, 0.25);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-family: "Orbitron", monospace;
+        font-size: 7px;
+      }
+
+      .input {
+        background: rgba(255, 255, 255, 0.03);
+        color: #ff6b9d;
+        border: 1px solid rgba(255, 45, 85, 0.12);
+        outline: none;
+        font-family: "Orbitron", monospace;
+        font-weight: 700;
+        letter-spacing: 6px;
+        box-shadow: 0 0 40px rgba(255, 45, 85, 0.04);
+      }
+
+      .input::placeholder {
+        color: rgba(255, 255, 255, 0.1);
+        letter-spacing: 3px;
+        font-weight: 400;
+        font-size: 14px;
+      }
+
+      .btn {
+        background: linear-gradient(135deg, #ff2d75 0%, #c9204e 100%);
+        color: #fff;
+        text-transform: uppercase;
+        font-family: "Orbitron", monospace;
+        box-shadow: 0 0 40px rgba(255, 45, 117, 0.15);
+      }
+
+      .message {
+        color: rgba(255, 255, 255, 0.6);
+        letter-spacing: 0.5px;
+        line-height: 1.9;
+      }
+
+      .terminal-path {
+        font-family: "Orbitron", monospace;
+        color: rgba(255, 45, 117, 0.12);
+        font-size: 7px;
+        letter-spacing: 1px;
+      }
+
+      .lock-icon {
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+
+        50% {
+          transform: scale(1.15);
+        }
+      }
+
+      .title {
+        animation: shimmer 4s ease-in-out infinite;
+      }
+
+      @keyframes shimmer {
+        0%,
+        100% {
+          background-position: 0% 50%;
+        }
+
+        50% {
+          background-position: 100% 50%;
+        }
+      }
+
+      .status {
+        animation: glitch 5s ease-in-out infinite;
+      }
+
+      @keyframes glitch {
+        0%,
+        88%,
+        100% {
+          opacity: 1;
+          transform: translateX(0);
+        }
+
+        89% {
+          opacity: 0.3;
+          transform: translateX(-3px);
+        }
+
+        90% {
+          opacity: 1;
+          transform: translateX(3px);
+        }
+
+        91% {
+          opacity: 0.15;
+          transform: translateX(-2px);
+        }
+
+        92% {
+          opacity: 1;
+          transform: translateX(0);
+        }
+
+        95% {
+          opacity: 0.4;
+          transform: translateX(4px);
+        }
+
+        96% {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .btn {
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .btn:hover {
+        transform: translateY(-3px) scale(1.03);
+        box-shadow: 0 10px 60px rgba(255, 45, 117, 0.35);
+        background: linear-gradient(135deg, #ff4d8a, #ff2d75);
+      }
+
+      .btn:active {
+        transform: translateY(0) scale(0.97);
+      }
+
+      .input {
+        transition: all 0.3s ease;
+      }
+
+      .input:focus {
+        border-color: rgba(255, 45, 117, 0.3);
+        box-shadow: 0 0 40px rgba(255, 45, 117, 0.08);
+      }
+
+      .screen {
+        transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .status {
+        transition:
+          color 0.5s ease,
+          text-shadow 0.5s ease;
+      }
+
+      .lock-icon {
+        transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .message {
+        transition:
+          opacity 0.8s ease 0.3s,
+          max-height 0.8s ease;
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+      }
+
+      .label,
+      .divider {
+        transition: all 0.5s ease;
+      }
+
+      .title {
+        transition: all 0.6s ease;
+      }
+
+      .subtitle {
+        transition: all 0.5s ease;
+      }
+
+      .terminal-path {
+        transition: all 0.5s ease;
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+
+        10%,
+        50%,
+        90% {
+          transform: translateX(-6px);
+        }
+
+        30%,
+        70% {
+          transform: translateX(6px);
+        }
+      }
+
+      .screen.wrong {
+        animation: shake 0.5s ease;
+      }
+
+      .screen.wrong .input {
+        border-color: rgba(255, 50, 50, 0.5) !important;
+        box-shadow: 0 0 30px rgba(255, 50, 50, 0.15) !important;
+      }
+
+      .screen.wrong .status {
+        color: #ff3232 !important;
+        text-shadow: 0 0 30px rgba(255, 50, 50, 0.5) !important;
+      }
+
+      .scan-line.active {
+        opacity: 1;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          #ff2d75,
+          #ff6b9d,
+          #ff2d75,
+          transparent
+        );
+        box-shadow:
+          0 0 30px rgba(255, 45, 117, 0.6),
+          0 0 80px rgba(255, 45, 117, 0.3);
+        animation: scanFull 1.5s ease-in-out infinite;
+      }
+
+      @keyframes scanFull {
+        0% {
+          top: 0;
+          opacity: 0;
+        }
+
+        10% {
+          opacity: 1;
+        }
+
+        90% {
+          opacity: 1;
+        }
+
+        100% {
+          top: 100%;
+          opacity: 0;
+        }
+      }
+
+      body.scanning .btn {
+        pointer-events: none;
+        opacity: 0.7;
+      }
+
+      .screen.granted .lock-icon {
+        font-size: 80px;
+        animation: heartBeat 1.2s ease-in-out infinite;
+      }
+
+      @keyframes heartBeat {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+
+        15% {
+          transform: scale(1.25);
+        }
+
+        30% {
+          transform: scale(1);
+        }
+
+        45% {
+          transform: scale(1.15);
+        }
+
+        60% {
+          transform: scale(1);
+        }
+      }
+
+      .screen.granted .title {
+        background: linear-gradient(135deg, #fbbf24, #f472b6, #fbbf24);
+        background-size: 300% 300%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .screen.granted .subtitle {
+        color: rgba(251, 191, 36, 0.3);
+      }
+
+      .screen.granted .status {
+        color: #00ff88;
+        text-shadow:
+          0 0 40px rgba(0, 255, 136, 0.6),
+          0 0 80px rgba(0, 255, 136, 0.2);
+        animation: none;
+        font-size: 17px;
+      }
+
+      .screen.granted .label {
+        max-height: 0;
+        opacity: 0;
+        margin: 0;
+        overflow: hidden;
+      }
+
+      .screen.granted .input {
+        max-height: 0;
+        padding: 0;
+        margin: 0;
+        border: none;
+        opacity: 0;
+        overflow: hidden;
+      }
+
+      .screen.granted .divider {
+        opacity: 0;
+        max-height: 0;
+        margin: 0;
+      }
+
+      .screen.granted .btn {
+        max-height: 0;
+        padding: 0;
+        margin: 0;
+        opacity: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .screen.granted .message {
+        opacity: 1;
+        max-height: 600px;
+        padding-top: 10px;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(18px);
+          filter: blur(4px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+          filter: blur(0);
+        }
+      }
+
+      .screen.granted .message span {
+        display: block;
+        opacity: 0;
+        animation: fadeInUp 0.7s ease forwards;
+      }
+
+      .screen.granted .message span:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+
+      .screen.granted .message span:nth-child(2) {
+        animation-delay: 0.35s;
+      }
+
+      .screen.granted .message span:nth-child(3) {
+        animation-delay: 0.7s;
+      }
+
+      .screen.granted .message span:nth-child(4) {
+        animation-delay: 1s;
+      }
+
+      .screen.granted .message span:nth-child(5) {
+        animation-delay: 1.3s;
+      }
+
+      .screen.granted .message span:nth-child(6) {
+        animation-delay: 1.6s;
+      }
+
+      .screen.granted .message span:nth-child(7) {
+        animation-delay: 1.9s;
+      }
+
+      .screen.granted .message span:nth-child(8) {
+        animation-delay: 2.3s;
+      }
+
+      .screen.granted .message span:nth-child(9) {
+        animation-delay: 2.7s;
+      }
+
+      .screen.granted .message .love-line {
+        font-size: 17px;
+        color: rgba(255, 255, 255, 0.75);
+        line-height: 1.9;
+        letter-spacing: 1px;
+        font-weight: 300;
+      }
+
+      .screen.granted .message .love-sep {
+        color: rgba(251, 191, 36, 0.35);
+        font-size: 14px;
+        letter-spacing: 10px;
+        margin: 22px 0;
+        text-align: center;
+      }
+
+      .screen.granted .message .love-quote {
+        font-size: 18px;
+        font-style: italic;
+        font-weight: 400;
+        color: #fbbf24;
+        line-height: 2;
+        letter-spacing: 0.3px;
+        padding-left: 22px;
+        border-left: 2px solid rgba(251, 191, 36, 0.25);
+        text-shadow: 0 0 25px rgba(251, 191, 36, 0.15);
+        text-align: left;
+      }
+
+      .screen.granted .message .love-sig {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.25);
+        margin-top: 28px;
+        letter-spacing: 4px;
+        font-family: "Orbitron", monospace;
+        text-transform: uppercase;
+      }
+
+      .screen.granted .terminal-path {
+        color: rgba(251, 191, 36, 0.12);
+      }
+
+      .screen.granted .glow-ring {
+        background: radial-gradient(
+          circle,
+          rgba(251, 191, 36, 0.12),
+          rgba(244, 114, 182, 0.06),
+          transparent 70%
+        );
+        width: 200px;
+        height: 200px;
+      }
+
+      /* — Unlocked Background — */
+      body.unlocked .orb-1 {
+        background: radial-gradient(
+          circle,
+          #fbbf24,
+          #92400e 40%,
+          transparent 70%
+        ) !important;
+        opacity: 0.35;
+      }
+
+      body.unlocked .orb-2 {
+        background: radial-gradient(
+          circle,
+          #f472b6,
+          #831843 40%,
+          transparent 70%
+        ) !important;
+        opacity: 0.35;
+      }
+
+      body.unlocked .orb-3 {
+        background: radial-gradient(
+          circle,
+          #fb923c,
+          transparent 70%
+        ) !important;
+        opacity: 0.3;
+      }
+
+      body.unlocked .vignette {
+        background: radial-gradient(
+          ellipse at center,
+          transparent 35%,
+          rgba(0, 0, 0, 0.75) 100%
+        );
+      }
+
+      .glow-ring {
+        opacity: 1;
+        background: radial-gradient(
+          circle,
+          rgba(255, 45, 117, 0.1),
+          transparent 70%
+        );
+        animation: glowPulse 3s ease-in-out infinite;
+        z-index: 1;
+      }
+
+      @keyframes glowPulse {
+        0%,
+        100% {
+          transform: translateX(-50%) scale(1);
+          opacity: 0.5;
+        }
+
+        50% {
+          transform: translateX(-50%) scale(1.5);
+          opacity: 1;
+        }
+      }
+
+      .bg-orb {
+        border-radius: 50%;
+        filter: blur(120px);
+        opacity: 0.3;
+        transition: all 1.5s ease;
+      }
+
+      .orb-1 {
+        width: 450px;
+        height: 450px;
+        background: radial-gradient(
+          circle,
+          #ff2d75,
+          #8b0030 40%,
+          transparent 70%
+        );
+        top: -180px;
+        left: -180px;
+        animation: float1 12s ease-in-out infinite;
+      }
+
+      .orb-2 {
+        width: 350px;
+        height: 350px;
+        background: radial-gradient(
+          circle,
+          #7c3aed,
+          #3b0764 40%,
+          transparent 70%
+        );
+        bottom: -140px;
+        right: -140px;
+        animation: float2 14s ease-in-out infinite;
+      }
+
+      .orb-3 {
+        width: 250px;
+        height: 250px;
+        background: radial-gradient(circle, #ff6b9d, transparent 70%);
+        top: 30%;
+        left: 70%;
+        animation: float3 9s ease-in-out infinite;
+      }
+
+      @keyframes float1 {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+
+        33% {
+          transform: translate(60px, 50px) scale(1.05);
+        }
+
+        66% {
+          transform: translate(-30px, 25px) scale(0.95);
+        }
+      }
+
+      @keyframes float2 {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+
+        50% {
+          transform: translate(-50px, -60px) scale(1.1);
+        }
+      }
+
+      @keyframes float3 {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+
+        33% {
+          transform: translate(35px, -35px);
+        }
+
+        66% {
+          transform: translate(-25px, 25px);
+        }
+      }
+
+      .vignette {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+          ellipse at center,
+          transparent 45%,
+          rgba(0, 0, 0, 0.6) 100%
+        );
+        opacity: 1;
+        z-index: 0;
+        transition: all 1.5s ease;
+      }
+
+      .scanlines {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(255, 255, 255, 0.004) 2px,
+          rgba(255, 255, 255, 0.004) 4px
+        );
+        opacity: 1;
+        z-index: 100;
+      }
+
+      @keyframes floatHeart {
+        0% {
+          transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+          opacity: 1;
+        }
+
+        50% {
+          opacity: 0.8;
+        }
+
+        100% {
+          transform: translateY(-100vh) translateX(var(--drift))
+            rotate(var(--spin)) scale(0.3);
+          opacity: 0;
+        }
+      }
+
+      @keyframes sparkle {
+        0% {
+          transform: translateY(0) scale(0);
+          opacity: 0;
+        }
+
+        20% {
+          transform: translateY(-15vh) scale(1);
+          opacity: 1;
+        }
+
+        100% {
+          transform: translateY(-100vh) scale(0);
+          opacity: 0;
+        }
+      }
+
+      @keyframes heartRain {
+        0% {
+          transform: translateY(-20px) translateX(0) rotate(0deg)
+            scale(var(--s));
+          opacity: 0;
+        }
+
+        5% {
+          opacity: var(--o);
+        }
+
+        50% {
+          transform: translateY(50vh) translateX(var(--sway)) rotate(180deg)
+            scale(var(--s));
+        }
+
+        90% {
+          opacity: var(--o);
+        }
+
+        100% {
+          transform: translateY(105vh) translateX(calc(var(--sway) * -0.5))
+            rotate(360deg) scale(var(--s));
+          opacity: 0;
+        }
+      }
+    </style>
+
+    <script>
+      /* ═══════════════════════════════════════════════════════
+           ✏️ EASY CONFIG — Edit these to customize your reel!
+           ═══════════════════════════════════════════════════════ */
+
+      var PASSWORDS = ["love", "you"]; // Accepted passwords (case-insensitive)
+
+      var LOVE_LINE_1 = "You are the only password";
+      var LOVE_LINE_2 = "to my heart 💕";
+
+      var LOVE_QUOTE_1 = "I loved you yesterday,";
+      var LOVE_QUOTE_2 = "I love you still,";
+      var LOVE_QUOTE_3 = "I always have,";
+      var LOVE_QUOTE_4 = "and I always will.";
+
+      var LOVE_SIGNATURE = "— forever yours 🤍";
+
+      var WRONG_MSG = "❌ WRONG PASSWORD";
+      var DENIED_MSG = "❤️ ACCESS DENIED";
+      var GRANTED_MSG = "✅ ACCESS GRANTED";
+
+      /* ═══════════════════════════════════════════════════════ */
+
+      var screen = document.getElementById("screen");
+      var lockIcon = document.getElementById("lockIcon");
+      var status = document.getElementById("status");
+      var message = document.getElementById("message");
+      var input = document.getElementById("passInput");
+      var flash = document.getElementById("flash");
+      var scanLine = document.getElementById("scanLine");
+      var btn = document.getElementById("unlockBtn");
+      var isLocked = true;
+
+      btn.addEventListener("click", function () {
+        if (!isLocked) return;
+
+        var typed = input.value.trim().toLowerCase();
+
+        if (!typed) {
+          triggerWrong();
+          return;
+        }
+
+        if (PASSWORDS.indexOf(typed) === -1) {
+          triggerWrong();
+          return;
+        }
+
+        isLocked = false;
+        btn.disabled = true;
+        startScan();
+      });
+
+      input.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") btn.click();
+      });
+
+      function triggerWrong() {
+        screen.classList.remove("wrong");
+        void screen.offsetWidth;
+        screen.classList.add("wrong");
+        status.textContent = WRONG_MSG;
+        input.value = "";
+        input.focus();
+
+        setTimeout(function () {
+          screen.classList.remove("wrong");
+          status.textContent = DENIED_MSG;
+        }, 1200);
+      }
+
+      function startScan() {
+        document.body.classList.add("scanning");
+        scanLine.classList.add("active");
+        btn.textContent = "SCANNING...";
+
+        setTimeout(function () {
+          btn.textContent = "DECRYPTING...";
+        }, 900);
+
+        setTimeout(function () {
+          btn.textContent = "VERIFYING...";
+        }, 1700);
+
+        setTimeout(function () {
+          flash.style.opacity = "0.6";
+          setTimeout(function () {
+            flash.style.opacity = "0";
+          }, 200);
+
+          document.body.classList.remove("scanning");
+          scanLine.classList.remove("active");
+          screen.classList.add("granted");
+          document.body.classList.add("unlocked");
+
+          lockIcon.textContent = "❤️";
+          status.textContent = GRANTED_MSG;
+
+          message.innerHTML =
+            '<span class="love-line">' +
+            LOVE_LINE_1 +
+            "</span>" +
+            '<span class="love-line">' +
+            LOVE_LINE_2 +
+            "</span>" +
+            '<span class="love-sep">── ♡ ──</span>' +
+            '<span class="love-quote">' +
+            LOVE_QUOTE_1 +
+            "</span>" +
+            '<span class="love-quote">' +
+            LOVE_QUOTE_2 +
+            "</span>" +
+            '<span class="love-quote">' +
+            LOVE_QUOTE_3 +
+            "</span>" +
+            '<span class="love-quote">' +
+            LOVE_QUOTE_4 +
+            "</span>" +
+            '<span class="love-sig">' +
+            LOVE_SIGNATURE +
+            "</span>";
+
+          btn.textContent = "UNLOCKED ❤️";
+
+          for (var i = 0; i < 40; i++) {
+            setTimeout(createHeart, i * 80);
+          }
+          for (var j = 0; j < 25; j++) {
+            setTimeout(createSparkle, j * 130);
+          }
+
+          setTimeout(function () {
+            setInterval(createFallingHeart, 350);
+          }, 2000);
+        }, 2500);
+      }
+
+      function createHeart() {
+        var pool = ["❤️", "💕", "💗", "💖", "🩷", "💝"];
+        var h = document.createElement("span");
+        h.textContent = pool[Math.floor(Math.random() * pool.length)];
+        var size = Math.random() * 22 + 14;
+        var drift = Math.random() * 120 - 60;
+        var spin = Math.random() * 1080 - 540;
+        var dur = Math.random() * 2 + 2.5;
+        h.style.cssText =
+          "position:fixed;bottom:-40px;font-size:" +
+          size +
+          "px;" +
+          "left:" +
+          Math.random() * 100 +
+          "%;z-index:201;pointer-events:none;" +
+          "animation:floatHeart " +
+          dur +
+          "s cubic-bezier(0.2,0.8,0.3,1) forwards;" +
+          "--drift:" +
+          drift +
+          "px;--spin:" +
+          spin +
+          "deg;";
+        document.getElementById("heartsContainer").appendChild(h);
+        setTimeout(function () {
+          h.remove();
+        }, 5000);
+      }
+
+      function createSparkle() {
+        var s = document.createElement("span");
+        s.textContent = "✨";
+        var dur = Math.random() * 3 + 2;
+        s.style.cssText =
+          "position:fixed;bottom:-20px;font-size:" +
+          (Math.random() * 14 + 10) +
+          "px;" +
+          "left:" +
+          Math.random() * 100 +
+          "%;z-index:201;pointer-events:none;" +
+          "animation:sparkle " +
+          dur +
+          "s ease-out forwards;";
+        document.getElementById("heartsContainer").appendChild(s);
+        setTimeout(function () {
+          s.remove();
+        }, 5500);
+      }
+
+      function createFallingHeart() {
+        var pool = ["❤️", "💗", "🩷", "💕", "🤍", "✨"];
+        var h = document.createElement("span");
+        h.textContent = pool[Math.floor(Math.random() * pool.length)];
+        var size = Math.random() * 0.6 + 0.4;
+        var opacity = Math.random() * 0.4 + 0.15;
+        var sway = Math.random() * 60 - 30;
+        var dur = Math.random() * 5 + 5;
+        h.style.cssText =
+          "position:fixed;top:-30px;font-size:" +
+          (Math.random() * 16 + 12) +
+          "px;" +
+          "left:" +
+          Math.random() * 100 +
+          "%;z-index:1;pointer-events:none;" +
+          "animation:heartRain " +
+          dur +
+          "s linear forwards;" +
+          "--s:" +
+          size +
+          ";--o:" +
+          opacity +
+          ";--sway:" +
+          sway +
+          "px;";
+        document.getElementById("heartsContainer").appendChild(h);
+        setTimeout(
+          function () {
+            h.remove();
+          },
+          (dur + 1) * 1000,
+        );
+      }
+    </script>
+  </body>
+</html>
